@@ -273,7 +273,7 @@ param
 
 typeTag
 	:	a='[' (t=UNIVERSAL | t=APPLICATION | t=PRIVATE)? (INT|val=valuereference)  ']' ( impOrExp=IMPLICIT | impOrExp=EXPLICIT)? 	
-			-> ^(TYPE_TAG[$a] $t? INT? ^(VALUE_REFERENCE[(IToken)val.Start] $val)? $impOrExp?)
+			-> ^(TYPE_TAG[$a] $t? INT? ^(VALUE_REFERENCE[(Token)val.start] $val)? $impOrExp?)
 	;
 	
 /*
@@ -507,7 +507,7 @@ actualParameter
 choiceValue :	identifier a=':' value	->^(CHOICE_VALUE[$a] identifier value)
 	;	
 
-namedValue 	:	a=identifier value		->^(NAMED_VALUE[(IToken)a.Start] identifier value)
+namedValue 	:	a=identifier value		->^(NAMED_VALUE[(Token)a.start] identifier value)
 	;
 	
 /*
@@ -534,7 +534,7 @@ value	:
 	|	NULL
 	|	PLUS_INFINITY
 	|   MINUS_INFINITY
-	|	val=valuereference										->^(VALUE_REFERENCE[(IToken)val.Start] $val)
+	|	val=valuereference										->^(VALUE_REFERENCE[(Token)val.start] $val)
 	|   INT
 	| 	FloatingPointLiteral
 	| a=L_BRACKET R_BRACKET 									-> ^(EMPTY_LIST[$a] )
@@ -575,7 +575,7 @@ exceptionSpec
 	:	'!' 
 	(
 		 INT											-> ^(EXCEPTION_SPEC  ^(EXCEPTION_SPEC_CONST_INT INT))
-		|val=valuereference								-> ^(EXCEPTION_SPEC  ^(EXCEPTION_SPEC_VAL_REF ^(VALUE_REFERENCE[(IToken)val.Start] $val)))
+		|val=valuereference								-> ^(EXCEPTION_SPEC  ^(EXCEPTION_SPEC_VAL_REF ^(VALUE_REFERENCE[(Token)val.start] $val)))
 		|type ':' value									-> ^(EXCEPTION_SPEC  ^(EXCEPTION_SPEC_TYPE_VALUE type value))
 	)
 														
@@ -798,13 +798,13 @@ FloatingPointLiteral
     :
     d=INT r=DOUBLE_DOT
     	  {
-    	  $d.Type = INT;
-    	  Emit($d);$d.Line = input.Line;
-          $r.Type = DOUBLE_DOT;
-    	  Emit($r);$r.Line = input.Line;
+    	  $d.setType(INT);
+    	  emit($d);$d.setLine(input.getLine());
+          $r.setType(DOUBLE_DOT);
+    	  emit($r);$r.setLine(input.getLine());
     	  }
     |	  INT DOT (DIGITS)? (Exponent)? 
-    | 	d = INT { $d.Type = INT; Emit($d);$d.Line = input.Line;}
+    | 	d = INT { $d.setType(INT); emit($d);$d.setLine(input.getLine());}
     ;
 
 	
