@@ -105,7 +105,7 @@ tokens {
 }
 
 @members {
-public class SyntaxErrorException extends Exception
+public static class SyntaxErrorException extends Exception
 {
     public SyntaxErrorException(String msg)  {
         super(msg);
@@ -136,21 +136,21 @@ public String getErrorHeader(RecognitionException e)
 
 
 @lexer::members {
-private java.util.List<IToken> tokens = new java.util.List<IToken>();
+private java.util.List<Token> tokens = new java.util.ArrayList<Token>();
 
 @Override
-public  void emit(IToken tok) {
+public void emit(Token tok) {
     state.token = tok;
    	tokens.add(tok);
 }
 
 @Override
-public  IToken nextToken() {
-	base.nextToken();
-    if ( tokens.Count==0 ) {
-        return Token.EOF_TOKEN;
+public Token nextToken() {
+	super.nextToken();
+    if ( tokens.size()==0 ) {
+        return getEOFToken();
     }
-    IToken ret = tokens[0];
+    Token ret = tokens.get(0);
     tokens.remove(ret);
     return ret;
 }
@@ -161,18 +161,19 @@ public override void reportError(RecognitionException e) {
         throw e;
 }*/
 
+/*
 @Override
-public void emitErrorMessage(string msg)
+public void emitErrorMessage(String msg)
 {
 //    throw new Semantix.Utils.SyntaxErrorException(msg);
     throw new asn1Parser.SyntaxErrorException(msg);
 }
+*/
 
 @Override
 public String getErrorHeader(RecognitionException e)
 {
-    object[] objArray1 = new object[] { "File ", System.IO.Path.GetFileName(input.SourceName), ", ", "line ", e.Line, ":", e.CharPositionInLine };
-    return string.Concat(objArray1);
+    return  "File " +  input + ", " +  "line " +  e.line + ":" +  e.charPositionInLine;
 }
 }
 
