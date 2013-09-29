@@ -10,6 +10,10 @@ import java.util.List;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonTree;
+
+import com.github.davidmoten.asn1.Asn1Parser.moduleDefinitions_return;
 
 public class Compiler {
 
@@ -28,12 +32,15 @@ public class Compiler {
 				CommonTokenStream tokens = new CommonTokenStream(lexer);
 
 				Asn1Parser parser = new Asn1Parser(tokens);
-				for (String token : parser.getTokenNames()) {
-					System.out.println(token);
-				}
-				process(parser, 0);
+				
+				moduleDefinitions_return defs = parser.moduleDefinitions();
+				CommonTree tree = (CommonTree) defs.getTree();
+				System.out.println(tree);
+				//process(parser, 0);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
+			} catch (RecognitionException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -52,7 +59,7 @@ public class Compiler {
 						System.out.print(method.getName() + "=");
 						Object result = method.invoke(object);
 						System.out.println(result);
-						process(result,depth+1);
+						process(result, depth + 1);
 					} catch (RuntimeException e) {
 						System.out.println(e.getClass().getSimpleName() + "("
 								+ e.getMessage() + ")");
