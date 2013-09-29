@@ -1,0 +1,19 @@
+-- This module created by Dave Moten and Trevor Lucas Mar 2008
+P1File {iso (1) member-body (2) 
+					standards-australia (36) 
+					australian-maritime-safety-authority (65377938320) mhs(6) mts(3) modules(0)
+  p1File(1) version-1999(1)} DEFINITIONS IMPLICIT TAGS ::=
+BEGIN
+IMPORTS
+  Message, Report, Probe
+    --==
+    FROM MTAAbstractService {joint-iso-itu-t mhs(6) mts(3) modules(0)
+      mta-abstract-service(2) version-1999(1)};
+
+P1File ::= CHOICE {
+  message  [0]  Message,
+  report      [1]  Report,
+  probe      [2]  Probe
+}
+
+END
