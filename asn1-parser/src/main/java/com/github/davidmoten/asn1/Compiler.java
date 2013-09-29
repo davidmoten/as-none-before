@@ -31,26 +31,31 @@ public class Compiler {
 				for (String token : parser.getTokenNames()) {
 					System.out.println(token);
 				}
-				process(parser);
+				process(parser, 0);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
 	}
 
-	private void process(Object object) {
-		if (object == null)
+	private void process(Object object, int depth) {
+		if (depth > 3)
+			return;
+		if (object == null
+				|| object.getClass().getName().startsWith("java.lang"))
 			return;
 		for (Method method : object.getClass().getDeclaredMethods()) {
 			try {
 				if (method.getParameterTypes().length == 0
 						&& (method.getModifiers() & Modifier.PUBLIC) != 0) {
 					try {
-						System.out.println(method.getName());
+						System.out.print(method.getName() + "=");
 						Object result = method.invoke(object);
-						process(result);
+						System.out.println(result);
+						process(result,depth+1);
 					} catch (RuntimeException e) {
-						System.out.println(e.getMessage());
+						System.out.println(e.getClass().getSimpleName() + "("
+								+ e.getMessage() + ")");
 					}
 				}
 			} catch (IllegalAccessException e) {
