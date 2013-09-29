@@ -26,6 +26,7 @@
 					<!-- Comma separated list of grammar files or pattern grammar files 
 						By default, grammar file(s) is in ${basedir}/src/main/antlr -->
 					<grammars>asn1.g</grammars>
+					<outputDirectory>${project.build.directory}/generated-sources/antlr3/com/github/davidmoten/asn1</outputDirectory>
 				</configuration>
 				<executions>
 					<execution>

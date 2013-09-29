@@ -99,9 +99,12 @@ tokens {
 
 @lexer::namespace { Antlr.Asn1 }
 
+@parser::header {
+package com.github.davidmoten.asn1;
+}
 
-@header {
-//#pragma warning disable 0219
+@lexer::header {
+package com.github.davidmoten.asn1;
 }
 
 @members {
