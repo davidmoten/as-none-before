@@ -2,14 +2,13 @@ package com.github.davidmoten.asn1;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-
-import com.github.davidmoten.asn1.Asn1Parser.moduleDefinitions_return;
 
 public class Compiler {
 
@@ -31,10 +30,22 @@ public class Compiler {
 				for (String token : parser.getTokenNames()) {
 					System.out.println(token);
 				}
-				moduleDefinitions_return defs = parser.moduleDefinitions();
+				process(parser.getClass(), parser);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
-			} catch (RecognitionException e) {
+			}
+		}
+	}
+
+	private <T> void process(Class<? extends T> cls, T object) {
+		for (Method method : cls.getDeclaredMethods()) {
+			try {
+				Object result = method.invoke(object);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			} catch (IllegalArgumentException e) {
+				throw new RuntimeException(e);
+			} catch (InvocationTargetException e) {
 				throw new RuntimeException(e);
 			}
 		}
