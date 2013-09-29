@@ -7,6 +7,9 @@ import java.util.List;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+
+import com.github.davidmoten.asn1.Asn1Parser.moduleDefinitions_return;
 
 public class Compiler {
 
@@ -28,7 +31,10 @@ public class Compiler {
 				for (String token : parser.getTokenNames()) {
 					System.out.println(token);
 				}
+				moduleDefinitions_return defs = parser.moduleDefinitions();
 			} catch (IOException e) {
+				throw new RuntimeException(e);
+			} catch (RecognitionException e) {
 				throw new RuntimeException(e);
 			}
 		}

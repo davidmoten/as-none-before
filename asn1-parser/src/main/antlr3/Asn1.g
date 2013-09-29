@@ -108,7 +108,7 @@ package com.github.davidmoten.asn1;
 }
 
 @members {
-public static class SyntaxErrorException extends Exception
+public static class SyntaxErrorException extends RuntimeException
 {
     public SyntaxErrorException(String msg)  {
         super(msg);
@@ -121,14 +121,12 @@ public override void ReportError(RecognitionException e) {
         throw e;
 }*/
 
-/*
 @Override
 public void emitErrorMessage(String msg)
 {
     throw new SyntaxErrorException(msg);
 //    throw new Semantix.Utils.SyntaxErrorException(msg);
 }
-*/
 
 @Override
 public String getErrorHeader(RecognitionException e)
@@ -164,14 +162,12 @@ public override void reportError(RecognitionException e) {
         throw e;
 }*/
 
-/*
 @Override
 public void emitErrorMessage(String msg)
 {
 //    throw new Semantix.Utils.SyntaxErrorException(msg);
-    throw new asn1Parser.SyntaxErrorException(msg);
+    throw new Asn1Parser.SyntaxErrorException(msg);
 }
-*/
 
 @Override
 public String getErrorHeader(RecognitionException e)
