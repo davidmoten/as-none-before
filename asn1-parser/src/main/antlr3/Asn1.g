@@ -1,5 +1,5 @@
 
-grammar asn1;
+grammar Asn1;
 options {
 	output=AST;
 	language=Java;

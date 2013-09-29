@@ -9,20 +9,25 @@ import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 
 public class Compiler {
-	
+
 	private final List<File> files;
 
 	public Compiler(List<File> files) {
 		this.files = files;
 	}
-	
+
 	public void compile() {
-		for (File file:files) {
+		for (File file : files) {
 			try {
 				CharStream s = new ANTLRFileStream(file.getPath());
-				asn1Lexer lexer = new asn1Lexer(s);
+
+				Asn1Lexer lexer = new Asn1Lexer(s);
 				CommonTokenStream tokens = new CommonTokenStream(lexer);
-				asn1Parser parser = new asn1Parser(tokens);
+
+				Asn1Parser parser = new Asn1Parser(tokens);
+				for (String token : parser.getTokenNames()) {
+					System.out.println(token);
+				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
