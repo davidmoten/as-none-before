@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.antlr.runtime.ANTLRFileStream;
@@ -30,23 +31,34 @@ public class Compiler {
 				for (String token : parser.getTokenNames()) {
 					System.out.println(token);
 				}
-				process(parser.getClass(), parser);
+				process(parser);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
 	}
 
-	private <T> void process(Class<? extends T> cls, T object) {
-		for (Method method : cls.getDeclaredMethods()) {
+	private void process(Object object) {
+		if (object == null)
+			return;
+		for (Method method : object.getClass().getDeclaredMethods()) {
 			try {
-				Object result = method.invoke(object);
+				if (method.getParameterTypes().length == 0
+						&& (method.getModifiers() & Modifier.PUBLIC) != 0) {
+					try {
+						System.out.println(method.getName());
+						Object result = method.invoke(object);
+						process(result);
+					} catch (RuntimeException e) {
+						System.out.println(e.getMessage());
+					}
+				}
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);
 			} catch (IllegalArgumentException e) {
 				throw new RuntimeException(e);
 			} catch (InvocationTargetException e) {
-				throw new RuntimeException(e);
+				System.out.println(e.getMessage());
 			}
 		}
 	}
