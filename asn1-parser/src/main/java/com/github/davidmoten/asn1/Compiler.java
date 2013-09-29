@@ -47,8 +47,8 @@ public class Compiler {
 
 	private void process(CommonTree t, int depth) {
 		for (int i = 0; i < depth; i++)
-			System.out.print(" ");
-		System.out.println(t.getText());
+			System.out.print("  ");
+		System.out.println(t.getText() + ":" + t.getType());
 		if (t.getChildCount() > 0)
 			for (Object c : t.getChildren()) {
 				process((CommonTree) c, depth + 1);
