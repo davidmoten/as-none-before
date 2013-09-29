@@ -46,6 +46,14 @@ If you have some comments/improvements, send me an e-mail.
 grammar ASN;
 options {backtrack=true;memoize=true;}
 
+@parser::header {
+package com.github.davidmoten.asn1;
+}
+
+@lexer::header {
+package com.github.davidmoten.asn1;
+}
+
 
 moduleDefinition :  IDENTIFIER (L_BRACE (IDENTIFIER L_PARAN NUMBER R_PARAN)* R_BRACE)?
      DEFINITIONS_LITERAL
