@@ -248,11 +248,49 @@ valueAssigment
 	:	valuereference type a=ASSIG_OP value	 -> ^(VAL_ASSIG[$a] valuereference type value)
 	;		
 
-/*		
 valueSetAssigment
-	:	typereference type '::=' L_BRACKET setOfValues R_BRACKET    -> ^(VAL_SET_ASSIG typereference type setOfValues)
+	:	typereference type '::=' L_BRACKET elementSetSpecs R_BRACKET    -> ^(VAL_SET_ASSIG typereference type elementSetSpecs)
 	;		
-*/	
+
+elementSetSpecs : 
+ rootElementSetSpec (COMMA EXT_MARK (COMMA additionalElementSetSpec)?)?
+	;
+
+rootElementSetSpec : elementSetSpec 
+;
+additionalElementSetSpec : elementSetSpec 
+;
+elementSetSpec : unions | ALL exclusions 
+;
+unions :   (intersections) (UnionMark intersections)*
+;
+exclusions : EXCEPT elements 
+;
+intersections : (intersectionElements) (IntersectionMark intersectionElements)*       
+;
+
+elements  : subtypeElements 
+// |  objectSetElements 
+// |  L_PARAN elementSetSpec R_PARAN 
+;
+//objectSetElements : 
+//    object | definedObject /*| objectSetFromObjects | parameterizedObjectSet      */
+//;
+
+intersectionElements : elements (exclusions)? ;
+
+subtypeElements 
+	:    
+ ( MIN rhComparison )
+ | value rhComparison?
+ | sizeShortConstraint
+ | patternExpression
+ ;
+ 
+rhComparison
+	:
+		 LESS_THAN?  DOUBLE_DOT LESS_THAN?  (value | MAX); 
+	
 typeAssigment 
 	:	/*SPECIAL_COMMENT**/ typereference paramList? a=ASSIG_OP type -> ^(TYPE_ASSIG[$a] typereference type paramList?/*SPECIAL_COMMENT* */)
 	;	

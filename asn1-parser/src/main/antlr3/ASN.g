@@ -44,7 +44,7 @@ If you have some comments/improvements, send me an e-mail.
 
 
 grammar ASN;
-options {backtrack=true;memoize=true;}
+options {backtrack=true;memoize=true;output=AST;}
 
 @parser::header {
 package com.github.davidmoten.asn1;

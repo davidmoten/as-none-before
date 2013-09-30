@@ -11,6 +11,7 @@ import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 
+import com.github.davidmoten.asn1.ASNParser.moduleDefinition_return;
 import com.github.davidmoten.asn1.Asn1Parser.moduleDefinitions_return;
 
 public class Compiler {
@@ -32,6 +33,26 @@ public class Compiler {
 				Asn1Parser parser = new Asn1Parser(tokens);
 
 				moduleDefinitions_return defs = parser.moduleDefinitions();
+				process(defs, 0);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			} catch (RecognitionException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void compile2() {
+		for (File file : files) {
+			try {
+				CharStream s = new ANTLRFileStream(file.getPath());
+
+				ASNLexer lexer = new ASNLexer(s);
+				CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+				ASNParser parser = new ASNParser(tokens);
+
+				moduleDefinition_return defs = parser.moduleDefinition();
 				process(defs, 0);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
