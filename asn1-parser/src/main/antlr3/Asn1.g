@@ -189,7 +189,7 @@ moduleDefinitions
 
 
 definitiveIdentifier
-	:	L_BRACKET definitiveObjIdComponent* R_BRACKET
+	:	L_BRACE definitiveObjIdComponent* R_BRACE
 	;
 
 definitiveObjIdComponent
@@ -249,7 +249,7 @@ valueAssigment
 	;		
 
 valueSetAssigment
-	:	typereference type '::=' L_BRACKET elementSetSpecs R_BRACKET    -> ^(VAL_SET_ASSIG typereference type elementSetSpecs)
+	:	typereference type '::=' L_BRACE elementSetSpecs R_BRACE    -> ^(VAL_SET_ASSIG typereference type elementSetSpecs)
 	;		
 
 elementSetSpecs : 
@@ -379,7 +379,7 @@ sizeShortConstraint
 nULL:	NULL;
 
 bitStringType
-	:	a=BIT STRING (L_BRACKET (bitStringItem (COMMA bitStringItem )* )? R_BRACKET )?	-> ^(BIT_STRING_TYPE[$a] bitStringItem*)
+	:	a=BIT STRING (L_BRACE (bitStringItem (COMMA bitStringItem )* )? R_BRACE )?	-> ^(BIT_STRING_TYPE[$a] bitStringItem*)
 	;
 
 bitStringItem 
@@ -391,7 +391,7 @@ booleanType
 	;
 	
 enumeratedType 
-	:	a=ENUMERATED L_BRACKET en1=enumeratedTypeItems2  ( COMMA ext=EXT_MARK exceptionSpec? (COMMA en2=enumeratedTypeItems2)? )? R_BRACKET
+	:	a=ENUMERATED L_BRACE en1=enumeratedTypeItems2  ( COMMA ext=EXT_MARK exceptionSpec? (COMMA en2=enumeratedTypeItems2)? )? R_BRACE
 	-> ^(ENUMERATED_TYPE[$a] $en1 ($ext exceptionSpec? $en2?) ?)
 	;
 
@@ -419,7 +419,7 @@ enumeratedLstItem	:
 */
 
 integerType
-	:	a=INTEGER ( L_BRACKET (integerTypeListItem (COMMA integerTypeListItem)*)? R_BRACKET)?	-> ^(INTEGER_TYPE[$a] integerTypeListItem*)
+	:	a=INTEGER ( L_BRACE (integerTypeListItem (COMMA integerTypeListItem)*)? R_BRACE)?	-> ^(INTEGER_TYPE[$a] integerTypeListItem*)
 	;
 	
 integerTypeListItem 
@@ -432,7 +432,7 @@ realType
 	
 	
 choiceType
-	:	a=CHOICE L_BRACKET choiceItemsList choiceExtensionBody? R_BRACKET
+	:	a=CHOICE L_BRACE choiceItemsList choiceExtensionBody? R_BRACE
 	-> ^(CHOICE_TYPE[$a] choiceItemsList choiceExtensionBody?)
 	;
 	
@@ -459,10 +459,10 @@ extensionAdditionAlternative
 	;	
 
 sequenceType
-	:	a=SEQUENCE L_BRACKET sequenceOrSetBody?  R_BRACKET -> ^(SEQUENCE_TYPE[$a] sequenceOrSetBody?)
+	:	a=SEQUENCE L_BRACE sequenceOrSetBody?  R_BRACE -> ^(SEQUENCE_TYPE[$a] sequenceOrSetBody?)
 	;
 	
-setType	:	a=SET L_BRACKET sequenceOrSetBody?  R_BRACKET -> ^(SET_TYPE[$a] sequenceOrSetBody?)
+setType	:	a=SET L_BRACE sequenceOrSetBody?  R_BRACE -> ^(SET_TYPE[$a] sequenceOrSetBody?)
 	;	
 	
 sequenceOrSetBody	:
@@ -551,7 +551,7 @@ namedValue 	:	a=identifier value		->^(NAMED_VALUE[(Token)a.start] identifier val
 To resolve another grammar Ambiguouity, we no more declare bitStringValue. The parser will only return valueList. Extra checking 
 must be done during semantic checking.
 bitStringValue
-	:	L_BRACKET identifier (COMMA identifier)* R_BRACKET		->^(BIT_STRING_VALUE identifier+)
+	:	L_BRACE identifier (COMMA identifier)* R_BRACE		->^(BIT_STRING_VALUE identifier+)
 	;
 */	
 
@@ -574,19 +574,19 @@ value	:
 	|	val=valuereference										->^(VALUE_REFERENCE[(Token)val.start] $val)
 	|   INT
 	| 	FloatingPointLiteral
-	| a=L_BRACKET R_BRACKET 									-> ^(EMPTY_LIST[$a] )
-	| a=L_BRACKET MANTISSA mant=INT COMMA BASE bas=INT COMMA EXPONENT exp=INT R_BRACKET -> ^(NUMERIC_VALUE2[$a] $mant $bas $exp)
+	| a=L_BRACE R_BRACE 									-> ^(EMPTY_LIST[$a] )
+	| a=L_BRACE MANTISSA mant=INT COMMA BASE bas=INT COMMA EXPONENT exp=INT R_BRACE -> ^(NUMERIC_VALUE2[$a] $mant $bas $exp)
 	|   choiceValue
-	| a=L_BRACKET namedValue (COMMA namedValue)* R_BRACKET 	->^(NAMED_VALUE_LIST[$a] namedValue+)
-	| a=L_BRACKET value (COMMA value)* R_BRACKET			->^(VALUE_LIST[$a] value+)
-	| a=L_BRACKET objectIdentifierComponent+ R_BRACKET		->^(OBJECT_ID_VALUE[$a] objectIdentifierComponent+ )
+	| a=L_BRACE namedValue (COMMA namedValue)* R_BRACE 	->^(NAMED_VALUE_LIST[$a] namedValue+)
+	| a=L_BRACE value (COMMA value)* R_BRACE			->^(VALUE_LIST[$a] value+)
+	| a=L_BRACE objectIdentifierComponent+ R_BRACE		->^(OBJECT_ID_VALUE[$a] objectIdentifierComponent+ )
 	;	
 	
 	
 /*
 a CharacterStringValue is
 	a string literal
-tuple		:   L_BRACKET INT COMMA INT R_BRACKET	;
+tuple		:   L_BRACE INT COMMA INT R_BRACE	;
 */	
 
 objectIdentifierComponent
@@ -675,10 +675,10 @@ permittedAlphabetExpression : a=FROM constraint	-> ^(PERMITTED_ALPHABET_EXPR[$a]
 
 innerTypeExpression 
 	: a=WITH COMPONENT constraint											-> ^(WITH_COMPONENT_CONSTR[$a] constraint)
-	| a=WITH COMPONENTS L_BRACKET
+	| a=WITH COMPONENTS L_BRACE
 			( EXT_MARK COMMA)?
 			namedConstraintExpression  (COMMA namedConstraintExpression)* 
-		R_BRACKET
+		R_BRACE
 		-> ^(WITH_COMPONENTS_CONSTR[$a] EXT_MARK? namedConstraintExpression+)
 	;
 
@@ -783,8 +783,8 @@ INCLUDES	:'INCLUDES';
 EXCEPT		:'EXCEPT';
 SET		:'SET';
 ASSIG_OP		: '::=';
-L_BRACKET	:	'{';	
-R_BRACKET	:	'}';	
+L_BRACE	:	'{';	
+R_BRACE	:	'}';	
 L_PAREN		:	'(';
 R_PAREN		:	')';
 COMMA		:	',';
