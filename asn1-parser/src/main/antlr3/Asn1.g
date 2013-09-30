@@ -239,7 +239,7 @@ imports :
 	;
 	
 importFromModule
-	:	(typereference | valuereference) (COMMA (typereference | valuereference))* FROM modulereference definitiveIdentifier?
+	:	(typereference | valuereference) (L_BRACE R_BRACE)? (COMMA (typereference | valuereference) (L_BRACE R_BRACE)?)* FROM modulereference definitiveIdentifier?
 		-> ^(IMPORTS_FROM_MODULE modulereference typereference* valuereference*  )
 	;	
 	
