@@ -580,9 +580,16 @@ value	:
 	| a=L_BRACE namedValue (COMMA namedValue)* R_BRACE 	->^(NAMED_VALUE_LIST[$a] namedValue+)
 	| a=L_BRACE value (COMMA value)* R_BRACE			->^(VALUE_LIST[$a] value+)
 	| a=L_BRACE objectIdentifierComponent+ R_BRACE		->^(OBJECT_ID_VALUE[$a] objectIdentifierComponent+ )
+	| unknownValue 
 	;	
 	
+unknownValue
+	:
+	L_BRACE (typereference (valuereference|(L_BRACE anyId+ R_BRACE)))+ R_BRACE 
+	;
 	
+anyId: LID | UID ;
+
 /*
 a CharacterStringValue is
 	a string literal
