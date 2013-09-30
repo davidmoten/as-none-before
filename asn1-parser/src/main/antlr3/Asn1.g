@@ -243,7 +243,7 @@ importFromModule
 		-> ^(IMPORTS_FROM_MODULE modulereference typereference* valuereference*  )
 	;	
 	
-	
+
 valueAssigment	
 	:	valuereference type a=ASSIG_OP value	 -> ^(VAL_ASSIG[$a] valuereference type value)
 	;		
@@ -633,7 +633,7 @@ exceptConstraint
 	:	ex1=constraintExpression (EXCEPT^ ex2=constraintExpression)?			
 	;	
 
-//The grammar is unambigues since (NULL) can be interpreted as both single value constraint and Type inclusion constraint
+//The grammar is unambiguous since (NULL) can be interpreted as both single value constraint and Type inclusion constraint
 
 constraintExpression
 	: valueRangeExpression		//single value & range constraint. Single value can be applied to any type.
