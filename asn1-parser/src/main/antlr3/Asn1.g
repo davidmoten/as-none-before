@@ -355,9 +355,12 @@ type	: typeTag?
     |objectIdentifier constraint*	customAttributes?		-> ^(TYPE_DEF typeTag? objectIdentifier constraint* customAttributes?)
     |relativeOID	constraint*		customAttributes?		-> ^(TYPE_DEF typeTag? relativeOID constraint* customAttributes?)
     |selectionType											-> ^(TYPE_DEF typeTag? selectionType)
+    // added by Dave Moten
+    |signedType												-> ^(TYPE_DEF typeTag? signedType)
 )
 ;
 
+signedType : 'SIGNED' L_BRACE type R_BRACE;
 
 customAttributes 
 	:	CUSTOM_ATTR_BEGIN customAttribute+ CUSTOM_ATTR_END 	-> ^(CUSTOM_ATTR_LIST customAttribute+ )
@@ -583,12 +586,14 @@ value	:
 	| unknownValue 
 	;	
 	
+// added by Dave Moten to ignore what might be instance values
 unknownValue
 	:
 	L_BRACE (typereference (valuereference|(L_BRACE anyId+ R_BRACE)))+ R_BRACE 
 	;
 	
 anyId: LID | UID ;
+
 
 /*
 a CharacterStringValue is
