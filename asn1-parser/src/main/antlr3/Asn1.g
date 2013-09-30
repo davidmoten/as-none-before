@@ -269,7 +269,7 @@ exclusions : EXCEPT elements
 intersections : (intersectionElements) (IntersectionMark intersectionElements)*       
 ;
 
-elements  : subtypeElements 
+elements  : subTypeElements 
 // |  objectSetElements 
 // |  L_PARAN elementSetSpec R_PARAN 
 ;
@@ -279,7 +279,7 @@ elements  : subtypeElements
 
 intersectionElements : elements (exclusions)? ;
 
-subtypeElements 
+subTypeElements 
 	:    
  ( MIN rhComparison )
  | value rhComparison?
