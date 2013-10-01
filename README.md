@@ -11,4 +11,6 @@ Apparently ANTLR is not a great fit for the full ASN.1 spec (see [here](https://
 
 I doubt this project will go anywhere much as I'm not familiar enough with ASN.1. Still fun to have a look at.
 
+My fifty cents about x420 is that it's pretty over the top compared to say SMTP but is pretty thorough. Given how long it's been around you'd think that the full gamut of open source tools (many languages and platforms)  would be out there to implement it. Certainly would have been an obstacle to adoption. Old thinking eh. 
+
 Status: *in development*
