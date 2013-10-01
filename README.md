@@ -3,6 +3,8 @@ as-none-before
 
 ASN.1 java compiler using ANTLR to parse ASN.1 notation and BouncyCastle for runtime decode and encode.
 
+Status: *in development*
+
 **Aim**: To generate java classes that can decode and encode P1 files which are defined by the x420 specification from the ITU.
 
 Found an ANTLR grammar [here](from https://github.com/ttsiodras/asn1scc/blob/master/Antlr/asn1.g) that fails on half of the x420 asn.1 definition files so I'm working on fixing the grammar.
@@ -13,4 +15,4 @@ I doubt this project will go anywhere much as I'm not familiar enough with ASN.1
 
 My fifty cents about x420 is that it's pretty over the top compared to say SMTP but is pretty thorough. Given how long it's been around you'd think that the full gamut of open source tools (many languages and platforms)  would be out there to implement it. Certainly would have been an obstacle to adoption. Old thinking eh. 
 
-Status: *in development*
+
