@@ -589,7 +589,7 @@ value	:
 // added by Dave Moten to ignore what might be instance values
 unknownValue
 	:
-	L_BRACE (typereference (valuereference|(L_BRACE anyId+ R_BRACE)))+ R_BRACE 
+	L_BRACE (typereference typereference* (valuereference|(L_BRACE anyId+ R_BRACE)))+ R_BRACE 
 	;
 	
 anyId: LID | UID ;
