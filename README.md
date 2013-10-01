@@ -3,7 +3,7 @@ as-none-before
 
 ASN.1 java compiler using ANTLR to parse ASN.1 notation and BouncyCastle for runtime decode and encode.
 
-Status: *in development*
+Status: *pre-alpha*
 
 **Aim**: To generate java classes that can decode and encode P1 files which are defined by the x420 specification from the ITU.
 
