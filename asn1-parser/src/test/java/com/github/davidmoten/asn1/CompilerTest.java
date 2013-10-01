@@ -28,6 +28,20 @@ public class CompilerTest {
 				"src/test/resources/expectingDot.asn")));
 		c.compile();
 	}
+	
+	@Test
+	public void test2() {
+		try {
+		Compiler c = new Compiler(Collections.singletonList(new File(
+				"src/test/resources/AuthenticationFramework.asn")));
+		c.compile();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	
 
 	@Test
 	public void testAll() {

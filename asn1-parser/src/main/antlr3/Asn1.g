@@ -239,10 +239,12 @@ imports :
 	;
 	
 importFromModule
-	:	(typereference | valuereference) (L_BRACE R_BRACE)? (COMMA (typereference | valuereference) (L_BRACE R_BRACE)?)* FROM modulereference definitiveIdentifier?
+	:	(typereference | valuereference) (L_BRACE R_BRACE)? (COMMA (typereference | valuereference) (L_BRACE R_BRACE)?)* 
+	FROM modulereference (definitiveIdentifier|definiteValue)?
 		-> ^(IMPORTS_FROM_MODULE modulereference typereference* valuereference*  )
 	;	
 	
+definiteValue: valuereference;
 
 valueAssigment	
 	:	valuereference type a=ASSIG_OP value	 -> ^(VAL_ASSIG[$a] valuereference type value)
@@ -589,7 +591,7 @@ value	:
 // added by Dave Moten to ignore what might be instance values
 unknownValue
 	:
-	L_BRACE (typereference typereference* (valuereference|(L_BRACE anyId+ R_BRACE)))+ R_BRACE 
+	L_BRACE (typereference OF? typereference* (valuereference|(L_BRACE (anyId PIPE?)+ R_BRACE)))+ R_BRACE 
 	;
 	
 anyId: LID | UID ;
