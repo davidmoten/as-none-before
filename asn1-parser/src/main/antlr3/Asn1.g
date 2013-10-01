@@ -118,21 +118,19 @@ public static class SyntaxErrorException extends RuntimeException
 /*
 public override void ReportError(RecognitionException e) {
 	base.ReportError(e);
-        throw e;
+    throw e;
 }*/
 
 @Override
-public void emitErrorMessage(String msg)
-{
-    throw new SyntaxErrorException(msg);
-//    throw new Semantix.Utils.SyntaxErrorException(msg);
+public void emitErrorMessage(String msg) {
+	throw new SyntaxErrorException(msg);
 }
 
 @Override
-public String getErrorHeader(RecognitionException e)
-{
+public String getErrorHeader(RecognitionException e) {
     return  "File " +  input.getTokenSource().getSourceName() + ", " +  "line " +  e.line + ":" + e.charPositionInLine;
 }
+
 }
 
 
@@ -207,12 +205,12 @@ moduleDefinition :  	a=modulereference	definitiveIdentifier?
 			exports?
 			imports?
 			(
-				typeAssigment
-				|valueAssigment
+				typeAssignment
+				|valueAssignment
 //				|valueSetAssigment
 			)*
 			END
-			->  ^(MODULE_DEF[$d] modulereference EXPLICIT? IMPLICIT? AUTOMATIC? EXTENSIBILITY? exports? imports? typeAssigment* valueAssigment* /* valueSetAssigment* */)
+			->  ^(MODULE_DEF[$d] modulereference EXPLICIT? IMPLICIT? AUTOMATIC? EXTENSIBILITY? exports? imports? typeAssignment* valueAssignment* /* valueSetAssigment* */)
 			;
 
 /*
@@ -246,7 +244,7 @@ importFromModule
 	
 definiteValue: valuereference;
 
-valueAssigment	
+valueAssignment	
 	:	valuereference type a=ASSIG_OP value	 -> ^(VAL_ASSIG[$a] valuereference type value)
 	;		
 
@@ -293,7 +291,7 @@ rhComparison
 	:
 		 LESS_THAN?  DOUBLE_DOT LESS_THAN?  (value | MAX); 
 	
-typeAssigment 
+typeAssignment 
 	:	/*SPECIAL_COMMENT**/ typereference paramList? a=ASSIG_OP type -> ^(TYPE_ASSIG[$a] typereference type paramList?/*SPECIAL_COMMENT* */)
 	;	
 
@@ -359,8 +357,12 @@ type	: typeTag?
     |selectionType											-> ^(TYPE_DEF typeTag? selectionType)
     // added by Dave Moten
     |signedType												-> ^(TYPE_DEF typeTag? signedType)
+    |extensionOnlyType										-> ^(TYPE_DEF typeTag? extensionOnlyType)
 )
 ;
+
+
+extensionOnlyType: L_BRACE EXT_MARK R_BRACE;
 
 signedType : 'SIGNED' L_BRACE type R_BRACE;
 
@@ -531,6 +533,8 @@ stringType	:
 referencedType
 	:	str1=UID ('.' str2=UID)?						 -> ^(REFERENCED_TYPE[$str1] $str1 $str2? )
 	|	str1=UID ('.' str2=UID)?	actualParameterList  -> ^(PREFERENCED_TYPE[$str1] $str1 $str2? actualParameterList?)
+	//added by Dave Moten for ampersand types to be ignored
+	|   UID '.' AMPERSAND anyId '(' (L_BRACE '@'? anyId R_BRACE)+ ')' OPTIONAL?
 	;	
 
 
@@ -802,16 +806,12 @@ R_BRACE	:	'}';
 L_PAREN		:	'(';
 R_PAREN		:	')';
 COMMA		:	',';
-
+AMPERSAND	:	'&';
 EXT_MARK	: '...';
 DOUBLE_DOT  : '..';
-
 CUSTOM_ATTR_BEGIN 	: '<<';
-
 CUSTOM_ATTR_END 	: '>>';
-
 LESS_THAN			: '<';
-
 
 BitStringLiteral	:
 	'\'' ('0'|'1'|' ' | '\t' | '\r' | '\n')* '\'B'
